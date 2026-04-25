@@ -52,7 +52,7 @@ Para publicar seu App diretamente atrelado ao código do seu GitHub de graça pa
 4. Configure assim o serviço:
    *   **Environment:** `Python 3`
    *   **Build Command:** `pip install -r requirements.txt`
-   *   **Start Command:** `gunicorn app:server --bind 0.0.0.0:$PORT`
+   *   **Start Command:** `gunicorn app:server --bind 0.0.0.0:$PORT --timeout 120`
    *   **Plan:** `Free`
 5. Clique em **Deploy**! A Render criará o "servidor", instalará as bibliotecas e te fornecerá uma URL pública pra você acessar do celular ou do notebook de qualquer lugar do mundo!
 
