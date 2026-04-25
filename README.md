@@ -1,5 +1,7 @@
 # 📊 Macro Brasil PRO
 
+🟢 **Acesso Ao Vivo:** [https://macro-brasil-pro.onrender.com/visao-geral](https://macro-brasil-pro.onrender.com/visao-geral)
+
 ## 🗂 Estrutura do Dashboard
 
 O app conta com as seguintes visualizações dinâmicas:
