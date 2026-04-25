@@ -20,7 +20,7 @@ Certifique-se de que tenha o **Python 3.9+** instalado.
 
 ```bash
 # 1. Clone o repositório para o seu computador
-git clone https://github.com/valvitorsantos/macro-brasil-pro.git
+git clone https://github.com/Valvitor/macro-brasil-pro.git
 cd macro-brasil-pro
 
 # 2. (Opcional) Crie e ative um ambiente virtual
