@@ -1,86 +1,62 @@
 # 📊 Macro Brasil PRO
 
-Dashboard macroeconômico de segunda geração — tema escuro profissional, análises exclusivas e visualizações de nível institucional.
+## 🗂 Estrutura do Dashboard
 
-Stack: **Python · Plotly Dash · BCB SGS API · Relatório Focus**
+O app conta com as seguintes visualizações dinâmicas:
 
----
-
-## Diferenciais vs v1
-
-| Recurso | v1 (Streamlit) | v2 PRO (Dash) |
-|---|---|---|
-| Tema | Light | Dark profissional |
-| Câmbio | Linha simples | Candlestick semanal + volatilidade |
-| KPI cards | Métricas simples | Sparklines integrados |
-| Análise de juros | Selic histórica | **Taxa Real ex-post + zona neutra** |
-| Correlação | Não | **Heatmap entre 6 indicadores** |
-| Ancoragem Focus | Não | **Evolução das expectativas por ano** |
-| Navegação | Sidebar radio | Header tabs (SPA) |
-| Gauge IPCA | Não | ✅ com zonas meta/teto/perigo |
+*   **Visão Geral:** Cartões de métricas (KPIs corrediços) e *Sparklines* super responsivos do Dólar, Juro, e IPCA.
+*   **Inflação:** Gráficos com funil de expectativas Focus ao longo do tempo + Monitor clássico de curva do IPCA/IGP-M e o clássico velocímetro do centro da meta.
+*   **Juros:** Avaliação de todo aperto monetário via Curva Real versus Nominal.
+*   **Câmbio:** *Candlestick* robusto de Forex (USD/BRL) mesclado num sub-gráfico de volatilidade absoluta.
+*   **Atividade:** Crescimento do **IBC-Br** acompanhando tendência por Médias Móveis + subsetor de Produção IBGE.
+*   **Fiscal & Crédito:** Monitor de endividamento da nação e as fatias de Concessões em Bilhões e %PIB contra inadimplência em duplo-eixo.
+*   **Análises Principais:** Cérebro da Inteligência de cruzamento num Heatmap multivariável e Correlações.
 
 ---
 
-## Análises exclusivas
+## 💻 Como Rodar e Testar Localmente
 
-### 1. Taxa de Juro Real Ex-Post
-`Taxa Real = Selic Meta − IPCA acumulado 12m`
-
-Compara com a taxa neutra estimada do Brasil (r* ~4–5% a.a.) para classificar o ciclo monetário como contracionista ou expansionista.
-
-### 2. Correlação entre Indicadores Macro
-Heatmap com correlação de Pearson (últimos 3 anos, dados mensais) entre IPCA 12m, Selic, USD/BRL, Resultado Primário, Inadimplência PF e Produção Industrial.
-
-### 3. Ancoragem das Expectativas Focus
-Mostra como o mercado foi revisando suas projeções de IPCA para cada ano-calendário ao longo dos últimos 12 meses. Proxy direto da credibilidade do Banco Central.
-
----
-
-## Como rodar
+Certifique-se de que tenha o **Python 3.9+** instalado.
 
 ```bash
+# 1. Clone o repositório para o seu computador
 git clone https://github.com/valvitorsantos/macro-brasil-pro.git
 cd macro-brasil-pro
 
+# 2. (Opcional) Crie e ative um ambiente virtual
 python -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate # ou `.venv\Scripts\activate` no Windows
 
+# 3. Instale as dependências requisitadas
 pip install -r requirements.txt
+
+# 4. Inicie o servidor em modo de desenvolvimento local
 python app.py
 ```
-
-Acesse em `http://localhost:8502`
-
----
-
-## Deploy
-
-**Render (recomendado):**
-- Build command: `pip install -r requirements.txt`
-- Start command: `python app.py`
-- Environment: Python 3.11
+> Acesse o Dashboard imediatamente pelo seu navegador em **`http://localhost:8502`**.
 
 ---
 
-## Fontes
+## 🚀 Publicação Pública (Deploy Nuvem)
 
-| Dado | Série BCB |
-|---|---|
-| IPCA | SGS 433 |
-| INPC | SGS 188 |
-| IGP-M | SGS 189 |
-| Selic Meta | SGS 432 |
-| USD/BRL | SGS 10813 |
-| Resultado Primário | SGS 5793 |
-| Dívida Bruta | SGS 4537 |
-| Dívida Líquida | SGS 4513 |
-| Inadimplência PF | SGS 21082 |
-| Concessões de Crédito | SGS 20631 |
-| Crédito/PIB | SGS 20626 |
-| Produção Industrial | SGS 21859 |
-| Expectativas Focus | BCB Olinda API |
+> [!WARNING]
+> **O GitHub Pages NÃO exibe dashboards de Python.** Ferramentas como o GitHub Pages foram feitas para *arquivos Estáticos* (HTML puro css sem backend). Por esse aplicativo requerer uma computação Python por baixo do capô para consultar OData/APIs, ele deve ser hospedado em um serviço em nuvem específico (PaaS) que rodará o Python 24 horas por dia!
+
+Para publicar seu App diretamente atrelado ao código do seu GitHub de graça para que qualquer pessoa possar ver através de um Link (ex: `https://meu-brasil-macro.onrender.com`), recomendamos a **Render.com**.
+
+### **Passo a Passo na Render:**
+
+1. Suba/Aperte *Push* de todos os seus arquivos (incluindo o modificador `app.py` atualizado e o `requirements.txt`) para o seu GitHub.
+2. Crie uma conta gratuita em [Render.com](https://render.com/).
+3. Crie um novo **"Web Service"**. Conecte a sua conta do GitHub e selecione o repositório `macro-brasil-pro`.
+4. Configure assim o serviço:
+   *   **Environment:** `Python 3`
+   *   **Build Command:** `pip install -r requirements.txt`
+   *   **Start Command:** `gunicorn app:server --bind 0.0.0.0:$PORT`
+   *   **Plan:** `Free`
+5. Clique em **Deploy**! A Render criará o "servidor", instalará as bibliotecas e te fornecerá uma URL pública pra você acessar do celular ou do notebook de qualquer lugar do mundo!
 
 ---
 
-**Valvitor Santos** · Consultoria de Dados para Gestoras  
-valvitorscf@gmail.com
+**Valvitor Santos** · Consultoria de Dados
+*valvitorscf@gmail.com*

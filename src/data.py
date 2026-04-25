@@ -72,6 +72,7 @@ def load() -> dict:
         "concessoes"         : _fetch(20631, d2, "concessoes"),
         "credito_pib"        : _fetch(20626, d3, "credito_pib"),
         "producao_industrial": _fetch(21859, d5, "producao_industrial"),
+        "ibcbr"              : _fetch(24363, d5, "ibcbr"),
         "focus_ipca"         : _focus("IPCA", FOCUS_ANUAIS),
         "focus_selic"        : _focus("", FOCUS_SELIC),
     }
@@ -90,7 +91,7 @@ def load() -> dict:
 
     # Taxa de juro real ex-post = Selic mensal − IPCA 12m
     if not raw["selic"].empty and not raw["ipca_12m"].empty:
-        selic_m = raw["selic"]["selic"].resample("ME").last().rename("selic_m")
+        selic_m = raw["selic"]["selic"].resample("MS").last().rename("selic_m")
         df_real = pd.concat([selic_m, raw["ipca_12m"]["ipca_12m"]], axis=1).dropna()
         df_real["taxa_real"] = df_real["selic_m"] - df_real["ipca_12m"]
         raw["taxa_real"] = df_real
@@ -122,17 +123,18 @@ def load() -> dict:
         "Res.Primário" : ("resultado_primario",   "resultado_primario"),
         "Inadimpl. PF" : ("inadimplencia",        "inadimplencia"),
         "Prod.Ind."    : ("producao_industrial",  "producao_industrial"),
+        "Ativ. IBC-Br" : ("ibcbr",                "ibcbr"),
     }
     corr_frames = {}
     cutoff = datetime.today() - timedelta(days=365 * 3)
     for label, (key, col) in slices.items():
         df = raw.get(key, pd.DataFrame())
         if not df.empty and col in df.columns:
-            s = df[col].resample("ME").last()
+            s = df[col].resample("MS").last()
             s = s[s.index >= cutoff]
             corr_frames[label] = s
     if len(corr_frames) >= 2:
-        raw["correlacao"] = pd.DataFrame(corr_frames).dropna()
+        raw["correlacao"] = pd.DataFrame(corr_frames)
     else:
         raw["correlacao"] = pd.DataFrame()
 

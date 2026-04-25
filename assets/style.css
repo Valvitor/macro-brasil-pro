@@ -111,7 +111,7 @@ body::-webkit-scrollbar-thumb  { background: var(--border-hi); border-radius: 3p
   border-radius: var(--radius);
   padding: 14px 16px 8px;
   cursor: default;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s ease-out;
   position: relative;
   overflow: hidden;
 }
@@ -125,7 +125,8 @@ body::-webkit-scrollbar-thumb  { background: var(--border-hi); border-radius: 3p
 }
 .kpi-card:hover {
   border-color: var(--border-hi);
-  box-shadow: 0 0 18px rgba(59,130,246,0.10);
+  box-shadow: 0 6px 18px rgba(59,130,246,0.15);
+  transform: translateY(-2px);
 }
 
 .kpi-label {
@@ -197,9 +198,13 @@ body::-webkit-scrollbar-thumb  { background: var(--border-hi); border-radius: 3p
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 4px 4px 0;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, transform 0.2s ease-out, box-shadow 0.2s;
 }
-.chart-card:hover { border-color: var(--border-hi); }
+.chart-card:hover { 
+  border-color: var(--border-hi); 
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
 
 /* ── Seção título ──────────────────────────────────────────────────────────── */
 .section-title {

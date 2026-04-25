@@ -5,6 +5,7 @@ Stack: Plotly Dash · tema escuro profissional · análises exclusivas.
 
 import dash
 from dash import dcc, html, Input, Output, callback, dash_table
+from dash.dash_table.Format import Format, Scheme
 import dash_bootstrap_components as dbc
 import pandas as pd
 from datetime import datetime
@@ -91,7 +92,7 @@ kpi_strip = html.Div(className="kpi-strip", children=[
     _kpi("Juro Real",      _fmt(real_v),      "",                          "neu",
          "var(--cyan)" if real_v and real_v >= 4 else "var(--amber)",
          _sparkfig("taxa_real","taxa_real","#06B6D4")),
-    _kpi("USD/BRL",        _fmt(usd_v, ".3f",""), _delta_str(d_usd,""," "), _delta_cls(d_usd),
+    _kpi("USD/BRL",        _fmt(usd_v, ".4f",""), _delta_str(d_usd, suffix="", fmt="+.4f"), _delta_cls(d_usd),
          "var(--amber)",  _sparkfig("usdbrl","usdbrl","#F59E0B")),
     _kpi("Res.Primário",   _fmt(prim_v,"","%PIB"), _delta_str(d_prim,"pp")if d_prim else "",
          _delta_cls(d_prim),"var(--purple)",_sparkfig("resultado_primario","resultado_primario","#8B5CF6")),
@@ -187,7 +188,10 @@ def if_focus_table() -> html.Div:
                className="section-title"),
         dash_table.DataTable(
             data=df.to_dict("records"),
-            columns=[{"name": c, "id": c} for c in df.columns],
+            columns=[
+                {"name": "Ano", "id": "Ano"},
+                {"name": "Expectativa IPCA (%)", "id": "Expectativa IPCA (%)", "type": "numeric", "format": Format(precision=2, scheme=Scheme.fixed)}
+            ],
             style_header={"backgroundColor": "#111D35", "color": "#475569",
                           "fontWeight": "600", "fontSize": "10px",
                           "textTransform": "uppercase", "letterSpacing": "0.06em",
@@ -240,7 +244,10 @@ def tab_cambio():
 
 def tab_atividade():
     return html.Div(className="db-content", children=[
-        _card(ch.chart_producao_industrial(S["producao_industrial"]), style={"height": "380px"}),
+        html.Div(className="grid-2", children=[
+            _card(ch.chart_producao_industrial(S["producao_industrial"]), style={"height": "380px"}),
+            _card(ch.chart_ibcbr(S.get("ibcbr", pd.DataFrame())), style={"height": "380px"}),
+        ]),
     ])
 
 
@@ -279,8 +286,8 @@ def tab_credito():
             ]),
             html.Div(className="kpi-card", style={"--kpi-accent": "var(--blue)"}, children=[
                 html.Div("Concessões (último mês)", className="kpi-label"),
-                html.Div(_fmt(last_val(S["concessoes"],"concessoes"), ".0f", " Bi").replace("Bi","")
-                         + " Bi" if last_val(S["concessoes"],"concessoes") else "—",
+                html.Div(_fmt(last_val(S["concessoes"], "concessoes") / 1000, ".1f", " Bi")
+                         if last_val(S["concessoes"], "concessoes") is not None else "—",
                          className="kpi-value"),
             ]),
             html.Div(className="kpi-card", style={"--kpi-accent": "var(--purple)"}, children=[
@@ -348,6 +355,7 @@ app = dash.Dash(
     suppress_callback_exceptions=True,
     meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}],
 )
+server = app.server
 
 TABS = [
     ("visao-geral",  "Visão Geral"),

@@ -460,3 +460,20 @@ def chart_producao_industrial(df: pd.DataFrame) -> go.Figure:
     fig.update_layout(title=_title("Produção Industrial (índice, base 2012=100)"),
                       yaxis_title="Índice", annotations=_source("BCB SGS 21859 / IBGE"), barmode="overlay")
     return fig
+
+
+def chart_ibcbr(df: pd.DataFrame) -> go.Figure:
+    if df.empty:
+        return go.Figure()
+    df = df.copy()
+    df["mm3"] = df["ibcbr"].rolling(3).mean()
+    fig = go.Figure()
+    fig.add_trace(go.Bar(x=df.index, y=df["ibcbr"], name="Mensal",
+                          marker_color=PURPLE, opacity=0.45,
+                          hovertemplate="%{x|%b %Y}: <b>%{y:.2f}</b><extra></extra>"))
+    fig.add_trace(go.Scatter(x=df.index, y=df["mm3"], name="Média móvel 3m",
+                              line=dict(color=AMBER, width=2.5),
+                              hovertemplate="%{x|%b %Y}: <b>%{y:.2f}</b><extra></extra>"))
+    fig.update_layout(title=_title("Índice de Atividade Econômica (IBC-Br)"),
+                      yaxis_title="Índice", annotations=_source("BCB SGS 24363"), barmode="overlay")
+    return fig
