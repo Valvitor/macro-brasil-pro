@@ -1,6 +1,6 @@
 # 📊 Macro Brasil PRO
 
-🟢 **Acesso Ao Vivo:** [https://macro-brasil-pro.onrender.com/visao-geral](https://macro-brasil-pro.onrender.com/visao-geral)
+🟢 **Acesso Ao Vivo:** [https://macro-brasil-pro.onrender.com/visao-geral](https://macro-brasil-pro.onrender.com)
 
 ## 🗂 Estrutura do Dashboard
 
